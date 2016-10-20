@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Exadata</title>
+    <meta name="viewport" content="width=device-width">
+    <link href="/css/kube.css" rel="stylesheet"/>
+    <link href="/css/exadata.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css?family=Raleway|Taviraj" rel="stylesheet">
+</head>
+<body v-cloak>
+    <header>
+        <h4>Exadata Management</h4>
+        <button class="button small outline" style="color:white;" @click="signout()">Sign Out</button>
+        <span>{{state.user.email}}&nbsp;</span>
+    </header>
+    <main>
+        <div class="content">
+            <div class="tab-bar">
+                <div class="tab-item" @click="state.tab='reimage'" :class="{active:state.tab=='reimage'}">
+                    Reimage
+                </div>
+                <div class="tab-item" @click="state.tab='upgrade'" :class="{active:state.tab=='upgrade'}">
+                    Upgrade
+                </div>
+                <div class="tab-item" @click="state.tab='tests'" :class="{active:state.tab=='tests'}">
+                    Tests
+                </div>
+            </div>
+            <div class="tab-view" v-if="state.tab=='reimage'">
+                <div style="">
+                    <h3 align="center">Reimage</h3>
+                    <div class="row">
+                        <div class="col">
+                            <div>nodes: {{state.reimage.nodes | json}}</div>
+                            <select v-model="state.reimage.nodes" multiple size="2">
+                                <option v-for="server in model.servers" v-if="server.type=='X5-2'||server.type=='X4-8'||server.type=='T7-2'">{{server.name}}</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <div>cells: {{state.reimage.cells | json}}</div>
+                            <select v-model="state.reimage.cells" multiple size="2">
+                                <option v-for="server in model.servers" v-if="server.type=='X5-2L'">{{server.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="col">
+                            <lable>image version</lable>
+                            <select v-model="state.reimage.image_ver">
+                                <option disabled="" selected></option>
+                                <option v-for="image_ver in model.image_vers">{{image_ver.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="col">
+                            <button id="reimage_install" class="button small outline" @click="longcmd('reimage_install')">install</button>
+                            <button class="button small outline" @click="clear('reimage_install')">clear</button>
+                        </div>
+                        <div class="col">
+                            <select v-model="state.reimage_install.logfile">
+                                <option disabled="" selected></option>
+                                <option v-for="logfile in state.log_files" v-if="logfile.startsWith('reimage_install')">{{logfile}}</option>
+                            </select>
+                            <button id="showlog" class="button small outline" @click="showlog('reimage_install', state.reimage_install.logfile)">show log</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <textarea rows="5" id="reimage_install_result">{{state.reimage_install.result}}</textarea>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="col">
+                            <label>type</label>
+                            <select v-model="state.reimage.type">
+                                <option v-for="type in model.types">{{type}}</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label>config</label>
+                            <select v-model="state.reimage.config">
+                                <option v-for="config in model.configs">{{config}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="col">
+                            <button id="reimage_config" class="button small outline" @click="longcmd('reimage_config')">config</button>
+                            <button class="button small outline" @click="clear('reimage_config')">clear</button>
+                        </div>
+                        <div class="col">
+                            <select v-model="state.reimage_config.logfile">
+                                <option disabled="" selected></option>
+                                <option v-for="logfile in state.log_files" v-if="logfile.startsWith('reimage_config')">{{logfile}}</option>
+                            </select>
+                            <button id="showlog" class="button small outline" @click="showlog('reimage_config', state.reimage_config.logfile)">show log</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <textarea rows="5" id="reimage_config_result">{{state.reimage_config.result}}</textarea>
+                        </div>
+                    </div>
+                </div>
+        
+            </div>
+            <div class="tab-view" v-if="state.tab=='upgrade'">
+                <h3 align="center">Upgrade</h3>
+                <div class="row">
+                    <div class="col">
+                        <lable>server</lable>
+                        <select v-model="state.upgrade.server">
+                            <option disabled="" selected></option>
+                            <option v-for="server in model.servers">{{server.name}}</option>
+                        </select>
+                        <lable>image version</lable>
+                        <select v-model="state.upgrade.image_ver">
+                            <option disabled="" selected></option>
+                            <option v-for="image_ver in model.image_vers">{{image_ver.name}}</option>
+                        </select>
+                        <button id="upgrade" class="button small outline" @click="longcmd('upgrade')">upgrade</button>
+                        <button class="button small outline" @click="clear('upgrade')">clear</button>
+                    </div>
+                    <div class="col">
+                        </br>select logfile
+                        <select v-model="state.upgrade.logfile">
+                            <option disabled="" selected></option>
+                            <option v-for="logfile in state.log_files" v-if="logfile.startsWith('upgrade')">{{logfile}}</option>
+                        </select>
+                        <button id="showlog" class="button small outline" @click="showlog('upgrade', state.upgrade.logfile)">show log</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <textarea rows="5" id="upgrade_result">{{state.upgrade.result}}</textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-view" v-if="state.tab=='tests'">
+                <h3 align="center">RDS Systest</h3>
+                <div class="row">
+                    <div class="col">
+                        <lable>server</lable>
+                        <select v-model="state.rdstest.server">
+                            <option disabled="" selected></option>
+                            <option v-for="server in model.servers">{{server.name}}</option>
+                        </select>
+                        <lable>image version</lable>
+                        <select v-model="state.rdstest.image_ver">
+                            <option disabled="" selected></option>
+                            <option v-for="image_ver in model.image_vers">{{image_ver.name}}</option>
+                        </select>
+                        <button id="rdstest" class="button small outline" @click="longcmd('rdstest')">rdstest</button>
+                        <button class="button small outline" @click="clear('rdstest')">clear</button>
+                        <textarea rows="5" id="rdstest_result">{{state.rdstest.result}}</textarea>
+                    </div>
+                </div>
+        
+                <br/><hr/>
+        
+                <div class="row">
+                    <div class="col">
+                        <h3 align="center">Other Test</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div v-if="state.overlay" @click="state.overlay=false" class="greyout"></div>
+    <div v-if="state.overlay=='reimage'" class="news modal">
+        <div class="close" @click="state.overlay=false"></div>
+        <h4>Hello overlay</h4>
+    </div>
+
+    <script src="/js/vue.js" type="text/javascript"></script>
+    <script src="/js/lodash.js" type="text/javascript"></script>
+    <script src="/js/vue-charts.js" type="text/javascript"></script>
+    <script src="/js/sortable.js" type="text/javascript"></script>
+    <script src="/js/vue-sortable.js" type="text/javascript"></script>
+    <script src="/js/jquery.js" type="text/javascript"></script>
+    <script src="/js/ajax.js" type="text/javascript"></script>
+    <script src="/js/marked.js" type="text/javascript"></script>
+    <script src="/js/xss.js" type="text/javascript"></script>
+    <script>
+        var vm = new Vue({
+            el: 'body',
+            data: {
+                state: {
+                    tab: "reimage",
+                    overlay: false,
+                    user: {},
+                    log_files: [],
+                    reimage: {
+                        nodes: [],
+                        cells: [],
+                        image_ver: "",
+                        type: "bm",
+                        config: "db2hc3"
+                    },
+                    reimage_install: {
+                        result: "",
+                        interval_id: "",
+                        current_page: 0,
+                        logfile: ""
+                    },
+                    reimage_config: {
+                        result: "",
+                        interval_id: "",
+                        current_page: 0,
+                        logfile: ""
+                    },
+                    upgrade: {
+                        server: {},
+                        image_ver: "",
+                        result: "",
+                        interval_id: "",
+                        current_page: 0,
+                        logfile: ""
+                    },
+                    rdstest: {
+                        server: {},
+                        image_ver: "",
+                        result: "",
+                        interval_id: "",
+                        current_page: 0,
+                        logfile: ""
+                    },
+                },
+                model: {
+                    loc_loc: "",
+                    servers: [],
+                    image_vers: []
+                }
+            },
+            created: function() {
+                var self = this;
+                if (!sessionStorage.getItem('token'))
+                    window.location.href = "/auth";
+                $.get('/api/user')
+                    .done(function (obj) {
+                        delete obj.tokens;
+                        self.state.user = obj;
+                    })
+                    .fail(function (xhr) {
+                        sessionStorage.clear();
+                        window.location.href = "/auth";
+                    })
+                $.get('/api/config')
+                    .done(function (obj) {
+                        self.model = obj;
+                    });
+                $.get('/api/log')
+                    .done(function (obj) {
+                    self.state.log_files = obj;
+                });
+            },
+            methods: {
+                signout: function () {
+                    sessionStorage.clear();
+                    window.location.href = "/auth";
+                },
+                longcmd: function (cmd) {
+                    var self = this;
+                    var interval_id = 0;
+                    var new_pages = 0;
+                    var start_status = "";
+
+                    var getSync = function (url, data, callback) {
+                        $.ajax({
+                            url: url,
+                            async: false,
+                            data: data,
+                            success: callback
+                        });
+                    }
+                    var longcmd_result = function() {
+                        getSync('/api/longcmd/'+cmd+'/data/pages', {}, function (obj) {
+                            new_pages = parseInt(obj);
+                        });
+                        for (i = self.state[cmd].current_page; i < new_pages; i++) {
+                            getSync('/api/longcmd/'+cmd+'/data/' + i, {}, function (obj) {
+                                self.state[cmd].result += obj;
+                            });
+                        };
+                        self.state[cmd].result = self.state[cmd].result.replace(/.+\r/g, "*").replace(/\r/g, "");
+                        self.state[cmd].current_page = new_pages;
+                        getSync('/api/longcmd/'+cmd+'/data/done', {}, function (obj) {
+                            if (obj) {
+                                $("#"+cmd).prop("disabled", false);
+                                clearInterval(interval_id);
+                            }
+                        });
+                    };
+
+                    var start_data = {};
+                    if (cmd == "reimage_install" || cmd == "reimage_config") {
+                        start_data = {
+                            nodes: self.state.reimage.nodes,
+                            cells: self.state.reimage.cells,
+                            image_ver: self.state.reimage.image_ver,
+                            type: self.state.reimage.type,
+                            config: self.state.reimage.config
+                        };
+                    } else {
+                        start_data = {};
+                    }
+                    getSync('/api/longcmd/'+cmd+'/start', start_data, function (obj) {
+                        start_status = obj;
+                        if (obj != "Started") {
+                            self.state[cmd].result = "ERROR: " + obj;
+                        }
+                    });
+                    if (start_status != "Started") {
+                        return;
+                    }
+                    $("#"+cmd).prop("disabled", true);
+
+                    self.state[cmd].current_page = 0;
+                    self.state[cmd].result = "";
+                    interval_id = setInterval(longcmd_result, 1000);
+                },
+                clear: function (cmd) {
+                    var self = this;
+                    self.state[cmd].result = "";
+                },
+                showlog: function (cmd, logfile) {
+                    var self = this;
+                    var getSync = function (url, data, callback) {
+                        $.ajax({
+                            url: url,
+                            async: false,
+                            data: data,
+                            success: callback
+                        });
+                    }
+                    getSync("/api/log/" + logfile, {}, function (obj) {
+                        self.state[cmd].result = obj.replace(/.+\r/g, "*").replace(/\r/g, "");
+                    });
+                }
+            },
+            watch: {
+                'state.reimage_install.result': {
+                    handler: function(value, oldValue) {
+                        document.getElementById('reimage_install_result').scrollTop = document.getElementById('reimage_install_result').scrollHeight;
+                    }
+                },
+                'state.reimage_config.result': {
+                    handler: function(value, oldValue) {
+                        document.getElementById('reimage_config_result').scrollTop = document.getElementById('reimage_config_result').scrollHeight;
+                    }
+                },
+                'state.upgrade.result': {
+                    handler: function(value, oldValue) {
+                        document.getElementById('upgrade_result').scrollTop = document.getElementById('upgrade_result').scrollHeight;
+                    }
+                },
+                'state.rdstest.result': {
+                    handler: function(value, oldValue) {
+                        document.getElementById('rdstest_result').scrollTop = document.getElementById('rdstest_result').scrollHeight;
+                    }
+                },
+            },
+        });
+    </script>
+</body>
+</html>

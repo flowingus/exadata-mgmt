@@ -1,0 +1,106 @@
+h1, h2, h3, h4 {
+    font-family: 'Taviraj'
+}
+
+body, div, p, h5, h6 {
+    font-family: 'Raleway';
+}
+
+body {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+a {
+    cursor: pointer;
+}
+
+.float-right {
+    float: right !important;
+}
+
+[v-cloak] {
+    display: none;
+}
+
+header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 36px;
+    background-color: #333333;
+    padding-left: 12px;
+    padding-right: 6px;
+    border-left: 2px solid yellowgreen;
+}
+
+header * {
+    display: inline-block;
+    color: white;
+    float: right;
+}
+
+header h4 {
+    float: left;
+    line-height: 36px;
+}
+
+main {
+    position: absolute;
+    top: 36px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.content {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 30px;
+    right: 30px;
+}
+
+.content .tab-bar {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.content .tab-bar .tab-item {
+    font-size: 16px;
+    cursor: pointer;
+    color: #333333;
+    display: inline-block;
+    margin-left: -4px;
+    padding-left: 12px;
+    padding-right: 12px;
+    background-color: #fafafa;
+}
+
+.content .tab-bar .tab-item:hover {
+    background-color: #f0f0f0;
+}
+
+.content .tab-bar .tab-item.active {
+    color: yellowgreen;
+    background-color: #eeeeee;
+}
+
+.content .tab-view {
+    padding: 6px;
+    position: relative;
+}
+
+.content .tab-view .card {
+    padding: 5px;
+    margin-top: 10px;
+    border: 1px solid #eee;
+}
+
+.content .tab-view .card .form-item {
+    margin-bottom: 6px;
+}
+

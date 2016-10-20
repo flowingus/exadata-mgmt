@@ -1,0 +1,103 @@
+{
+    "users": [
+        {
+            "email": "hong.x.liu@oracle.com",
+            "password": "63W5exFZgPYe8pUoYTMEMlip5kW5yhlE4Tl2xTyDAOdrndmjY+z25Uz66mCcfNl9X1lvg9aVGAClgC5RmhNtC2NRB8Qls2YXJRYluGbBh4qkvfbj2LaIK+MSDtKNuYcAbq7vKHdWg9WznYQmUxsyRpxronVTL2HynXM9BybpHUH0aYUc7r9QFcwDnbShuRvRumJHrU9USqlXLYvBb5luvE1QYWzbxmxMrvYtCEBLTv4GPPgMyN5gRmtl4QyY/nDmmwkEL9z5q64DYzXtdWcRCjzeYlZoZWAnU6SD+neOP8MLLdPj65mj7qD0SAcmrKQ8oQ5q81gy4KdOswoNB5IM6qiO0oloyJAxZxjwUVk30Jpx/YEv9y4b9f96YL6ETsI0QDoIjkhnP5+dDZe8qviuUk4hGchMvgK0pCqDEkJTr6Nltggo2dMb/GFj6Tn5apsWLMWbEdt54Kl4z6xhHD89naXBr/b83meztWxaQNvVqOXQTys1whhCh3noRVFa1qTIMUy4nOe4VUXG0LIP7jb5gMHa+uOKgyZFMwqjpUGYIHW7LMJsD0LQ0lLXBiwDrN9qklc3IS8lpIPE75BbaR+EQt8eR8WCsTheUmkBvMxIAXO7FkxMy2QnQKKc+bl4Y8Ex5FqWINUQS5IlcpARMy4cxHS/7H6/z6q4DCQnEMdd/Lo=",
+            "tokens": []
+        }
+    ],
+    "log_loc": "/exadata/log/",
+    "servers": [
+        {
+            "name": "ca-ex01db01",
+            "type": "X5-2"
+        },
+        {
+            "name": "ca-ex01db02",
+            "type": "X5-2"
+        },
+        {
+            "name": "ca-ex01db03",
+            "type": "X5-2"
+        },
+        {
+            "name": "ca-ex01db04",
+            "type": "X5-2"
+        },
+        {
+            "name": "ca-ex01db05",
+            "type": "T7-2"
+        },
+        {
+            "name": "ca-ex01db06",
+            "type": "T7-2"
+        },
+        {
+            "name": "ca-ex01db07",
+            "type": "X4-8"
+        },
+        {
+            "name": "ca-ex01db08",
+            "type": "X4-8"
+        },
+        {
+            "name": "ca-ex01cel01",
+            "type": "X5-2L"
+        },
+        {
+            "name": "ca-ex01cel02",
+            "type": "X5-2L"
+        },
+        {
+            "name": "ca-ex01cel03",
+            "type": "X5-2L"
+        },
+        {
+            "name": "ca-ex01cel04",
+            "type": "X5-2L"
+        },
+        {
+            "name": "ca-ex01cel05",
+            "type": "X5-2L"
+        },
+        {
+            "name": "ca-ex01cel06",
+            "type": "X5-2L"
+        },
+        {
+            "name": "ca-ex01cel07",
+            "type": "X5-2L"
+        }
+    ],
+    "image_vers": [
+        {
+            "name": "12.2.1.1.0-161014"
+        },
+        {
+            "name": "12.2.1.1.0-161005"
+        },
+        {
+            "name": "12.2.1.1.0-160929"
+        },
+        {
+            "name": "12.1.2.4.0-160705"
+        },
+        {
+            "name": "12.1.2.3.2-160721"
+        },
+        {
+            "name": "12.1.2.3.0-160207.3"
+        }
+    ],
+    "types": [
+        "bm",
+        "vm"
+    ],
+    "configs": [
+        "db2hc3",
+        "db2ef3_48",
+        "db_ovm",
+        "db2hc3ovm",
+        "db2ef3"
+    ]
+}
